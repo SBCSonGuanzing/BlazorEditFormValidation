@@ -1,0 +1,11 @@
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\bin\Debug\net8.0\BlazorPlayGround.Shared.deps.json
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\bin\Debug\net8.0\BlazorPlayGround.Shared.dll
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\bin\Debug\net8.0\BlazorPlayGround.Shared.pdb
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\BlazorPlayGround.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\BlazorPlayGround.Shared.AssemblyInfoInputs.cache
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\BlazorPlayGround.Shared.AssemblyInfo.cs
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\BlazorPlayGround.Shared.csproj.CoreCompileInputs.cache
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\BlazorPlayGround.Shared.dll
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\refint\BlazorPlayGround.Shared.dll
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\BlazorPlayGround.Shared.pdb
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\ref\BlazorPlayGround.Shared.dll

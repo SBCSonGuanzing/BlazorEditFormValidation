@@ -1,0 +1,185 @@
+﻿@page "/characters"
+
+<h3>Characters</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Id</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ( var character in characters)
+        {
+            <tr>
+                <td><img src="@character.Image" class="rounded" style="max-height: 100px;" /></td>
+                <td>@character.Id</td>
+                <td>@character.Name</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => EditCharacter(character.Id)">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateCharacter"> Create a New Character </button>
+
+
+<EditForm Model="character" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator/>
+    <div>
+        <label for="id">Id</label>
+        <InputNumber id="id" @bind-Value="character.Id" class="form-control"></InputNumber>
+
+        @* Individual Validation Message *@
+
+        <ValidationMessage For="@(() => character.Id)"/>
+    </div>
+
+    <div>
+        <label for="name">Name</label>
+        <InputText id="name" @bind-Value="character.Name" class="form-control"></InputText>
+
+        @* Individual Validation Message *@
+
+        <ValidationMessage For="@(() => character.Name)" />
+
+    </div>
+
+    <div>
+        <label for="bio">Bio</label>
+        <InputTextArea id="bio" @bind-Value="character.Bio" class="form-control"></InputTextArea>
+    </div>
+
+    <div>
+        <label for="birthdate">BirthDate</label>
+        <InputDate id="birthdate" @bind-Value="character.BirthDate" class="form-control"></InputDate>
+    </div>
+
+    <div>
+        <label for="team">Team</label>
+        <br />
+        <InputRadioGroup id="team" @bind-Value="character.TeamId" class="form-control">
+            @foreach  (var team in teams)
+            {
+                <InputRadio Value="@team.Id"/>
+                <span style="padding-left:5px;">@team.Id</span>
+                <br />
+            }
+        </InputRadioGroup>
+    </div>
+
+    <div>
+        <label for="difficulty"></label>
+        <InputSelect id="difficulty" @bind-Value="character.DifficultyId" class="form-control">
+            @foreach (var difficulty in difficulties)
+            {
+                <option value="@difficulty.Id">@difficulty.Title</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <InputCheckbox id="isReadyToFight" @bind-Value="character.isReadyToFight" class="form-check-input" />
+        <label for="isReadyToFight" class="form-check-label">Ready to Fight</label>
+    </div>
+
+    <div>
+        <img src="@character.Image" class="rounded" style="max-height:200px" />
+    </div>
+    
+    <div>
+        <label for="image">Image</label>
+        <InputFile OnChange="OnFileChange" class="form-control"/>
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary">@(isNew ? "Create Character" : "Update Character")</button>
+    @if(!isNew) {
+        <button type="button" class="btn btn-danger" @onclick="DeleteCharacter">Delete</button>
+    }
+
+    @* Summary of Validation  *@
+    <ValidationSummary /> 
+</EditForm>
+<p style="height:500px;"></p>
+
+@code {
+
+    static List<Team> teams = new List<Team>
+    {
+        new Team {Id = 1, Name = "Avengers"},
+        new Team {Id = 2, Name = "Justice League"}
+    };
+
+    static List<Difficulty> difficulties = new List<Difficulty>
+    {
+        new Difficulty {Id = 1, Title = "Easy"},
+        new Difficulty {Id = 2, Title = "Normal"},
+        new Difficulty {Id = 3, Title = "Hard"},
+    };
+
+    static List<Character> characters = new List<Character>
+    {
+        new Character
+        {
+            Id = 1,
+            Name = "Peter Parker",
+            Bio = "Dude hanging out in New York City",
+            BirthDate = new DateTime(2001, 8, 10),
+            TeamId = 1,
+            DifficultyId = 1,
+            isReadyToFight = true,
+            Image = "https://seeklogo.com/images/S/spider-man-comic-new-logo-322E9DE914-seeklogo.com.png"
+        }
+    };
+
+    // New Instance of Character Object using Character Model
+    Character character = new Character();
+
+    bool isNew = true;
+
+    private void EditCharacter(int id)
+    {
+        var characterToEdit = characters.Find(c => c.Id == id);
+        if (characterToEdit != null)
+        {
+            character = characterToEdit;
+            isNew = false;
+        }
+    }
+
+    private void CreateCharacter()
+    {
+        character = new Character();
+        isNew = true;
+    }
+
+    private void DeleteCharacter()
+    {
+        characters.Remove(character);
+    }
+
+    private void HandleSubmit()
+    {
+        if(isNew)
+        {
+            characters.Add(character); 
+        }
+    }
+
+    async Task OnFileChange(InputFileChangeEventArgs e)
+    {
+        var format = "image/png";
+        var resizedImage = await e.File.RequestImageFileAsync(format, 200, 200);
+        var buffer = new byte[resizedImage.Size];
+        await resizedImage.OpenReadStream().ReadAsync(buffer);
+        var imageData = $"data:{format}; base64, {Convert.ToBase64String(buffer)}";
+        character.Image = imageData;
+
+    }
+}
