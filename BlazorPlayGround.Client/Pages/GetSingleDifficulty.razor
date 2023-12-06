@@ -1,0 +1,78 @@
+﻿@page "/difficulty/{id:int}"
+@page "/difficulty"
+
+@using BlazorPlayGround.Client.Services.DifficultyService
+@inject HttpClient Http
+@inject IClientDifficultyService clientDifficultyService
+@inject NavigationManager NavigationManager
+
+<h3>Teams</h3>
+
+@if (id is null)
+{
+    <PageTitle>New Team</PageTitle>
+    <h2>Create a New Team</h2>
+}
+else
+{
+    <PageTitle>Edit @difficulty.Title</PageTitle>
+    <h2>Edit @difficulty.Title</h2>
+}
+
+<EditForm Model="difficulty" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+
+    <div>
+        <label for="name">Name</label>
+        <InputText id="name" @bind-Value="difficulty.Title" class="form-control" />
+        <ValidationMessage For="() => difficulty.Title" />
+
+    </div>
+    <br />
+    <div>
+        <button type="submit" class="btn btn-primary">@btnText</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? id { get; set; }
+
+    string btnText = string.Empty;
+
+    public Difficulty difficulty = new Difficulty();
+
+    protected override void OnInitialized()
+    {
+        btnText = id == null ? "Save New Difficulty" : "Update Difficulty";
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (id is not null)
+        {
+            var result = await clientDifficultyService.GetSingleDifficulty((int)id);
+            if (result != null)
+            {
+                difficulty = result;
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/difficulties");
+            }
+        }
+    }
+
+    async Task HandleSubmit()
+    {
+        if (id is null)
+        {
+            await clientDifficultyService.AddDifficulty(difficulty);
+        }
+        else
+        {
+            await clientDifficultyService.UpdateDifficulty((int)id, difficulty);
+        }
+    }
+
+}

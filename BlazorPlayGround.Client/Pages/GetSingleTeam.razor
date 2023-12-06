@@ -1,0 +1,78 @@
+﻿@page "/team/{id:int}"
+@page "/team"
+
+@using BlazorPlayGround.Client.Services.TeamService
+@inject HttpClient Http
+@inject IClientTeamService clientTeamService
+@inject NavigationManager NavigationManager
+
+<h3>Teams</h3>
+
+@if (id is null)
+{
+    <PageTitle>New Team</PageTitle>
+    <h2>Create a New Team</h2>
+}
+else
+{
+    <PageTitle>Edit @team.Name</PageTitle>
+    <h2>Edit @team.Name</h2>
+}
+
+<EditForm Model="team" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+
+    <div>
+        <label for="name">Name</label>
+        <InputText id="name" @bind-Value="team.Name" class="form-control" />
+        <ValidationMessage For="() => team.Name" />
+
+    </div>
+    <br />
+    <div>
+        <button type="submit" class="btn btn-primary">@btnText</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? id { get; set; }
+
+    string btnText = string.Empty;
+
+    public Team team = new Team();
+
+    protected override void OnInitialized()
+    {
+        btnText = id == null ? "Save New Team" : "Update Team";
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (id is not null)
+        {
+            var result = await clientTeamService.GetSingleTeam((int)id);
+            if (result != null)
+            {
+                team = result;
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/team");
+            }
+        }
+    }
+
+    async Task HandleSubmit()
+    {
+        if (id is null)
+        {
+            await clientTeamService.AddTeam(team);
+        }
+        else
+        {
+            await clientTeamService.UpdateTeam((int)id, team);
+        }
+    }
+
+}

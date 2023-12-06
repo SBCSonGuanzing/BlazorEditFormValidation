@@ -1,0 +1,93 @@
+﻿@page "/characters"
+
+@using BlazorPlayGround.Client.Services.CharacterServices
+
+@inject HttpClient Http
+@inject IClientCharacterService clientCharacterService
+@inject IClientTeamService clientTeamService
+@inject IClientDifficultyService clientDifficultyService
+
+@inject NavigationManager NavigationManager
+
+<h3>Characters</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Bio</th>
+            <th>BirthDate</th>
+            <th>Team</th>
+            <th>Difficulty</th>
+            <th>isReadyToFight</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var character in clientCharacterService.characters)
+        {
+            <tr>
+                <td><img src="@character.Image" class="rounded" style="max-height: 100px;" /></td>
+                <td>@character.Name</td>
+                <td>@character.Bio</td>
+                <td>@character.BirthDate</td>
+                @if(character.Team != null)
+                {
+                    <td>@character.Team.Name</td>
+                } else
+                {
+                    <td>No Results Found</td>
+                }
+                @if (character.Difficulty != null)
+                {
+                    <td>@character.Difficulty.Title</td>
+                }
+                else
+                {
+                    <td>No Results Found</td>
+                }
+                <td>@character.isReadyToFight</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => EditCharacter(character.Id)">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+                    <button class="btn btn-danger" @onclick="() => DeleteCharacter(character.Id)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="CreateCharacter"> Create a New Character </button>
+
+<p style="height:500px;"></p>
+
+@code {
+
+    List<Character> characters = new List<Character>();
+
+    Character character = new Character();
+
+    protected override async Task OnInitializedAsync()
+    {
+        characters = await clientCharacterService.GetAllCharacters();
+    }
+  
+    void CreateCharacter() => NavigationManager.NavigateTo($"/character");
+    void EditCharacter(int id) => NavigationManager.NavigateTo($"/character/{id}");
+    async void DeleteCharacter(int id)
+    {
+        await clientCharacterService.DeleteCharacter(id);
+        StateHasChanged();
+    }
+
+    private void HandleSubmit()
+    {      
+        characters.Add(character);
+    }
+
+    
+}

@@ -1,0 +1,67 @@
+﻿@page "/teams"
+
+@using BlazorPlayGround.Client.Services.TeamService
+@inject HttpClient Http
+@inject IClientTeamService clientTeamService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Teams</PageTitle>
+
+<h3>Teams</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Teams</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var teams in clientTeamService.teams)
+        {
+            <tr>
+                <td>@teams.Name</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => editTeam(teams.Id)">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="btn btn-danger" @onclick="() => deleteTeam(teams.Id)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<button class="btn btn-primary"
+        @onclick="CreateNewTeam">
+    Create New Team
+</button>
+
+
+@code {
+
+    List<Team> teams = new List<Team>();
+
+    Team team = new Team();
+
+    protected override async Task OnInitializedAsync()
+    {
+        teams = await clientTeamService.GetAllTeam();
+    }
+
+    // Delete Team
+    async void deleteTeam(int id)
+    {
+        await clientTeamService.DeleteTeam(id);
+        StateHasChanged();
+    }
+
+    void CreateNewTeam() => NavigationManager.NavigateTo($"/team");
+
+    void editTeam(int id) => NavigationManager.NavigateTo($"/team/{id}");
+
+
+
+}

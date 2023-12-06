@@ -9,3 +9,4 @@ C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\BlazorPlayG
 C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\refint\BlazorPlayGround.Shared.dll
 C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\BlazorPlayGround.Shared.pdb
 C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\ref\BlazorPlayGround.Shared.dll
+C:\Project\BlazorPlayGround\BlazorPlayGround.Shared\obj\Debug\net8.0\BlazorPlayGround.Shared.sourcelink.json

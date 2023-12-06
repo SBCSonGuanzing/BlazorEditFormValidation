@@ -1,0 +1,137 @@
+﻿@page "/character/{id:int}"
+@page "/character"
+
+@using BlazorPlayGround.Client.Services
+
+@inject HttpClient Http
+@inject IClientCharacterService clientCharacterService
+@inject IClientTeamService clientTeamService
+@inject IClientDifficultyService clientDifficultyService   
+@inject NavigationManager NavigationManager
+
+<h3>Teams</h3>
+
+@if (id is null)
+{
+    <PageTitle>New Character</PageTitle>
+    <h2>Create a New Character</h2>
+}
+else
+{
+    <PageTitle>Edit @character.Name</PageTitle>
+    <h2>Edit @character.Name</h2>
+}
+
+<EditForm Model="character" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+
+    <div> 
+        <label for="name">Name</label>
+        <InputText id="name" @bind-Value="character.Name" class="form-control"></InputText>
+        <ValidationMessage For="() => character.Name" />
+
+    </div>
+
+    <div>
+        <label for="bio">Bio</label>
+        <InputTextArea id="bio" @bind-Value="character.Bio" class="form-control"></InputTextArea>
+        <ValidationMessage For="() => character.Bio" />
+
+    </div>
+
+    <div>
+        <label for="birthdate">BirthDate</label>
+        <InputDate id="birthdate" @bind-Value="character.BirthDate" class="form-control"></InputDate>
+    </div>
+
+    <div>
+        <label for="teamId">Team ID</label>
+        <InputSelect id="teamId" @bind-Value="character.TeamId" class="form-control">
+            @foreach (var team in clientTeamService.teams)
+            {
+                <option value="@team.Id">@team.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label for="difficultyId">Difficulty ID</label>
+        <InputSelect id="difficultyId" @bind-Value="character.DifficultyId" class="form-control">
+            @foreach (var difficulty in clientDifficultyService.difficulties)
+            {
+                <option value="@difficulty.Id">@difficulty.Title</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label for="image">Image</label>
+        <InputFile OnChange="OnFileChange" class="form-control" />
+    </div>
+    <br />
+    <div>
+        <InputCheckbox id="isReadyToFight" @bind-Value="character.isReadyToFight" class="form-check-input" />
+
+        <label for="isReadyToFight" class="form-check-label">Ready to Fight</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">@(isNew ? "Create Character" : "Update Character")</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? id { get; set; }
+
+    string btnText = string.Empty;
+
+    bool isNew = true;
+
+    public Character character = new Character();
+
+    protected override async Task OnInitializedAsync()
+    {
+        btnText = id == null ? "Save New Character" : "Update Character";
+        await clientTeamService.GetAllTeam();
+        await clientDifficultyService.GetAllDifficulty();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (id != null)
+        {
+            var result = await clientCharacterService.GetSingleCharacter((int)id);
+            if (result != null)
+            {
+                character = result;
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/characters");
+            }
+        }
+    }
+
+    async Task OnFileChange(InputFileChangeEventArgs e)
+    {
+        var format = "image/png";
+        var resizedImage = await e.File.RequestImageFileAsync(format, 200, 200);
+        var buffer = new byte[resizedImage.Size];
+        await resizedImage.OpenReadStream().ReadAsync(buffer);
+        var imageData = $"data:{format}; base64, {Convert.ToBase64String(buffer)}";
+        character.Image = imageData;
+    }
+
+    private async Task HandleSubmit()
+    {
+        if (id is null)
+        {
+            await clientCharacterService.AddCharacter(character);
+        }
+        else
+        {
+            await clientCharacterService.UpdateCharacter(character);
+        }
+    }
+
+}

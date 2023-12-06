@@ -1,0 +1,67 @@
+﻿@page "/difficulties"
+
+@using BlazorPlayGround.Client.Services.TeamService
+@inject HttpClient Http
+@inject IClientDifficultyService clientDifficultyService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Difficulties</PageTitle>
+
+<h3>Difficulties</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Difficulty</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var difficulty in clientDifficultyService.difficulties)
+        {
+            <tr>
+                <td>@difficulty.Title</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => editTeam(difficulty.Id)">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="btn btn-danger" @onclick="() => deleteTeam(difficulty.Id)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<button class="btn btn-primary"
+        @onclick="CreateNewTeam">
+    Create New Team
+</button>
+
+
+@code {
+
+    List<Difficulty> difficulties = new List<Difficulty>();
+
+    Difficulty difficulty = new Difficulty();
+
+    protected override async Task OnInitializedAsync()
+    {
+        difficulties = await clientDifficultyService.GetAllDifficulty();
+    }
+
+    // Delete Team
+    async void deleteTeam(int id)
+    {
+        await clientDifficultyService.DeleteDifficulty(id);
+        StateHasChanged();
+    }
+
+    void CreateNewTeam() => NavigationManager.NavigateTo($"/difficulty");
+
+    void editTeam(int id) => NavigationManager.NavigateTo($"/difficulty/{id}");
+
+
+
+}

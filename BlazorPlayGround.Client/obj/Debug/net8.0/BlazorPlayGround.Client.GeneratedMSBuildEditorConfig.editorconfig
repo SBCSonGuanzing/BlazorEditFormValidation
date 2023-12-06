@@ -26,12 +26,32 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Project/BlazorPlayGround/BlazorPlayGround.Client/Pages/Characters.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2hhcmFjdGVycy5yYXpvcg==
+[C:/Project/BlazorPlayGround/BlazorPlayGround.Client/Pages/AllCharacter.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxsQ2hhcmFjdGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Project/BlazorPlayGround/BlazorPlayGround.Client/Pages/AllDifficulty.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxsRGlmZmljdWx0eS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Project/BlazorPlayGround/BlazorPlayGround.Client/Pages/AllTeam.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxsVGVhbS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Project/BlazorPlayGround/BlazorPlayGround.Client/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Project/BlazorPlayGround/BlazorPlayGround.Client/Pages/GetSingleCharacter.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2V0U2luZ2xlQ2hhcmFjdGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Project/BlazorPlayGround/BlazorPlayGround.Client/Pages/GetSingleDifficulty.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2V0U2luZ2xlRGlmZmljdWx0eS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Project/BlazorPlayGround/BlazorPlayGround.Client/Pages/GetSingleTeam.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2V0U2luZ2xlVGVhbS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Project/BlazorPlayGround/BlazorPlayGround.Client/Pages/Home.razor]

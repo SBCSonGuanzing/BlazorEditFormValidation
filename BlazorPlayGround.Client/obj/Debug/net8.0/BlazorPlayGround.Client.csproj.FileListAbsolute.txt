@@ -1038,3 +1038,4 @@ C:\Project\BlazorPlayGround\BlazorPlayGround.Client\obj\Debug\net8.0\BlazorPlayG
 C:\Project\BlazorPlayGround\BlazorPlayGround.Client\obj\Debug\net8.0\refint\BlazorPlayGround.Client.dll
 C:\Project\BlazorPlayGround\BlazorPlayGround.Client\obj\Debug\net8.0\BlazorPlayGround.Client.pdb
 C:\Project\BlazorPlayGround\BlazorPlayGround.Client\obj\Debug\net8.0\ref\BlazorPlayGround.Client.dll
+C:\Project\BlazorPlayGround\BlazorPlayGround.Client\obj\Debug\net8.0\BlazorPlayGround.Client.sourcelink.json
