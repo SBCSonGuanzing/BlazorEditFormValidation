@@ -28,7 +28,7 @@ namespace BlazorPlayGround.Client.Services.CharacterServices
 
         public async Task<List<Character>> DeleteCharacter(int id)
         {
-            HttpResponseMessage? response = await _httpClient.DeleteAsync($"api/Character/delete-character/{id}");
+            HttpResponseMessage? response = await _httpClient.DeleteAsync($"api/Character/{id}");
 
             if (response != null && response.IsSuccessStatusCode)
             {
@@ -63,7 +63,7 @@ namespace BlazorPlayGround.Client.Services.CharacterServices
 
         public async Task UpdateCharacter(Character character)
         {
-            await _httpClient.PutAsJsonAsync($"api/Character/update-character/{character.Id}", character);
+            await _httpClient.PutAsJsonAsync($"api/Character/{character.Id}", character);
             _navigationManager.NavigateTo("/characters");
         }
     }

@@ -8,36 +8,37 @@
 <PageTitle>Teams</PageTitle>
 
 <h3>Teams</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Teams</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var teams in clientTeamService.teams)
-        {
-            <tr>
-                <td>@teams.Name</td>
-                <td>
-                    <button class="btn btn-primary" @onclick="() => editTeam(teams.Id)">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button class="btn btn-danger" @onclick="() => deleteTeam(teams.Id)">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<MudTable Items="clientTeamService.teams" Hover="true" Striped="true" Dense="true" Class="mb-2">
+    <HeaderContent>
+        <MudTh>Teams</MudTh>
+        <MudTh>Action</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+
+        <MudTd DataLabel="Title">
+            @context.Name
+        </MudTd>
+
+        <MudTd>
+            <MudIconButton OnClick="() => editTeam(context.Id)"
+                           Icon="@Icons.Material.Filled.Edit"
+                           Color="Color.Primary"
+                           Variant="Variant.Filled"></MudIconButton>
+            <MudIconButton OnClick="() => deleteTeam(context.Id)"
+                           Icon="@Icons.Material.Filled.Delete"
+                           Color="Color.Error"
+                           Variant="Variant.Filled">
+            </MudIconButton>
+        </MudTd>
+
+    </RowTemplate>
+</MudTable>
 
 
-<button class="btn btn-primary"
-        @onclick="CreateNewTeam">
-    Create New Team
-</button>
+<MudIconButton OnClick="CreateNewTeam"
+               Color="Color.Primary"
+               Variant="Variant.Filled">Create New Team
+</MudIconButton>
 
 
 @code {

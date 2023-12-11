@@ -34,7 +34,7 @@ namespace BlazorPlayGround.Server.Controllers
         }
 
         // Update a Character
-        [HttpPut("update-character/{id}")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<List<Character>>> UpdateCharacter(int id, Character request)
         {
             var result = await _characterService.UpdateCharacter(id, request);
@@ -43,19 +43,18 @@ namespace BlazorPlayGround.Server.Controllers
             return Ok(result);
         }
 
-        // Delete a Character
-        [HttpDelete("delete-character/{id}")]
+         // Delete a Hero
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Character>> DeleteCharacter(int id)
         {
             var result = await _characterService.DeleteCharacter(id);
             if (result is null)
             {
-                return NotFound("Hero not found");
+                return NotFound("Character not found");
             }
 
             return Ok(result);
         }
-
 
         // Get a Single SuperHero 
         [HttpGet("{id}")]

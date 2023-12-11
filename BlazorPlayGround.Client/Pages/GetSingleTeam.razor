@@ -21,22 +21,36 @@ else
 
 <EditForm Model="team" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Team" @bind-Value="@team.Name"
+                          For="@(() => team.Name)">
+            </MudTextField>
+        </MudCardContent>
+    </MudCard>
 
-    <div>
-        <label for="name">Name</label>
-        <InputText id="name" @bind-Value="team.Name" class="form-control" />
-        <ValidationMessage For="() => team.Name" />
-
-    </div>
     <br />
-    <div>
-        <button type="submit" class="btn btn-primary">@btnText</button>
-    </div>
+
+    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">@(isNew ? "Create Team" : "Update Team")</MudButton>
+    @if(!isNew)
+    {
+        
+    <MudButton ButtonType="ButtonType.Button"
+               OnClick="() => DeleteTeam(team.Id)"
+               Color="Color.Error"
+               Variant="Variant.Filled">
+        Delete Difficulty
+    </MudButton>
+    }
+
 </EditForm>
+
 
 @code {
     [Parameter]
     public int? id { get; set; }
+
+    bool isNew = true;
 
     string btnText = string.Empty;
 
@@ -75,4 +89,9 @@ else
         }
     }
 
+    async void DeleteTeam(int id)
+    {
+        await clientTeamService.DeleteTeam(id);
+        StateHasChanged();
+    }
 }

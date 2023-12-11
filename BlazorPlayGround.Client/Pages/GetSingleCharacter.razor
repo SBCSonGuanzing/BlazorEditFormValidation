@@ -22,64 +22,73 @@ else
     <h2>Edit @character.Name</h2>
 }
 
+
 <EditForm Model="character" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Name" @bind-Value="@character.Name"
+                For="@(() => character.Name)"
+            >
+            </MudTextField>
+            <MudTextField Label="Bio" @bind-Value="character.Bio"
+                For="@(() => character.Bio)"
+            >
+            </MudTextField>
+            <MudSelect Label="Teams" @bind-Value="character.TeamId">
+                @foreach (var team in clientTeamService.teams)
+                {
+                    <MudSelectItem Value="@team.Id">
+                        @team.Name
+                    </MudSelectItem>
+                }
+            </MudSelect>
+             <MudSelect Label="Difficulty" @bind-Value="character.DifficultyId">
+                @foreach (var difficulties in clientDifficultyService.difficulties)
+                {
+                    <MudSelectItem Value="@difficulties.Id">
+                        @difficulties.Title
+                    </MudSelectItem>
+                }
+            </MudSelect>
+           
+            <MudImage Src="@character.Image" Elevation="25" Class="rounded my-2"></MudImage>
+            <br />
+            <InputFile id="fileInput" OnChange="OnFileChange" hidden/>
+            <MudButton
+                HtmlTag="label"    
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                StartIcon="@Icons.Material.Filled.CloudUpload"
+                for="fileInput"
+            >
+                Upload Image
+            </MudButton>
+            <br/>
+            <MudSwitch @bind-Checked="@character.isReadyToFight" Color="Color.Primary" Label="Ready to Fight?"/>
 
-    <div> 
-        <label for="name">Name</label>
-        <InputText id="name" @bind-Value="character.Name" class="form-control"></InputText>
-        <ValidationMessage For="() => character.Name" />
-
-    </div>
-
-    <div>
-        <label for="bio">Bio</label>
-        <InputTextArea id="bio" @bind-Value="character.Bio" class="form-control"></InputTextArea>
-        <ValidationMessage For="() => character.Bio" />
-
-    </div>
-
-    <div>
-        <label for="birthdate">BirthDate</label>
-        <InputDate id="birthdate" @bind-Value="character.BirthDate" class="form-control"></InputDate>
-    </div>
-
-    <div>
-        <label for="teamId">Team ID</label>
-        <InputSelect id="teamId" @bind-Value="character.TeamId" class="form-control">
-            @foreach (var team in clientTeamService.teams)
-            {
-                <option value="@team.Id">@team.Name</option>
-            }
-        </InputSelect>
-    </div>
-
-    <div>
-        <label for="difficultyId">Difficulty ID</label>
-        <InputSelect id="difficultyId" @bind-Value="character.DifficultyId" class="form-control">
-            @foreach (var difficulty in clientDifficultyService.difficulties)
-            {
-                <option value="@difficulty.Id">@difficulty.Title</option>
-            }
-        </InputSelect>
-    </div>
-
-    <div>
-        <label for="image">Image</label>
-        <InputFile OnChange="OnFileChange" class="form-control" />
-    </div>
+        </MudCardContent>
+    </MudCard>
     <br />
-    <div>
-        <InputCheckbox id="isReadyToFight" @bind-Value="character.isReadyToFight" class="form-check-input" />
 
-        <label for="isReadyToFight" class="form-check-label">Ready to Fight</label>
-    </div>
 
-    <button type="submit" class="btn btn-primary">@(isNew ? "Create Character" : "Update Character")</button>
+    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">@(isNew ? "Create Character" : "Update Character")</MudButton>
 
+    @if(!isNew) {
+    <MudButton ButtonType="ButtonType.Button"
+        OnClick="() => DeleteCharacter(character.Id)"
+                   Color="Color.Error"
+                   Variant="Variant.Filled"> Delete Character
+    </MudButton>
+    }
 </EditForm>
 
+<p style="height:500px;"></p>
+
 @code {
+
+  
+
     [Parameter]
     public int? id { get; set; }
 
@@ -104,6 +113,7 @@ else
             if (result != null)
             {
                 character = result;
+                isNew = false;
             }
             else
             {
@@ -132,6 +142,12 @@ else
         {
             await clientCharacterService.UpdateCharacter(character);
         }
+    }
+
+    async void DeleteCharacter(int id)
+    {
+        await clientCharacterService.DeleteCharacter(id);
+        StateHasChanged();
     }
 
 }

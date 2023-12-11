@@ -11,58 +11,58 @@
 
 <h3>Characters</h3>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Bio</th>
-            <th>BirthDate</th>
-            <th>Team</th>
-            <th>Difficulty</th>
-            <th>isReadyToFight</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var character in clientCharacterService.characters)
-        {
-            <tr>
-                <td><img src="@character.Image" class="rounded" style="max-height: 100px;" /></td>
-                <td>@character.Name</td>
-                <td>@character.Bio</td>
-                <td>@character.BirthDate</td>
-                @if(character.Team != null)
-                {
-                    <td>@character.Team.Name</td>
-                } else
-                {
-                    <td>No Results Found</td>
-                }
-                @if (character.Difficulty != null)
-                {
-                    <td>@character.Difficulty.Title</td>
-                }
-                else
-                {
-                    <td>No Results Found</td>
-                }
-                <td>@character.isReadyToFight</td>
-                <td>
-                    <button class="btn btn-primary" @onclick="() => EditCharacter(character.Id)">
-                        <i class="fa-solid fa-pencil"></i>
-                    </button>
-                    <button class="btn btn-danger" @onclick="() => DeleteCharacter(character.Id)">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<MudTable Items="clientCharacterService.characters" Hover="true" Striped="true" Dense="true" Class="mb-2">
+    <HeaderContent>
+        <MudTh>Image</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Bio</MudTh>
+        <MudTh>BirthDate</MudTh>
+        <MudTh>Team</MudTh>
+        <MudTh>Difficulty</MudTh>
+        <MudTh>IsReadyToFight</MudTh>
+        <MudTh>Action</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Image"><MudAvatar Image="@context.Image"></MudAvatar></MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Bio">@context.Bio</MudTd>
+            <MudTd DataLabel="BirthDate">@context.BirthDate</MudTd>
+            @if (context.Team != null)
+            {
+                <MudTd DataLabel="Team">@context.Team.Name</MudTd>
+            }
+            else
+            {
+                <MudTd DataLabel="NoResult">No Results Found</MudTd>
+            }
+            @if (context.Difficulty != null)
+            {
+                <MudTd DataLabel="Title">@context.Difficulty.Title</MudTd>
+            }
+            else
+            {
+                <MudTd>No Results Found</MudTd>
+            }
+            <MudTd DataLabel="isReadyToFight">@context.isReadyToFight</MudTd>
+            <MudTd>
+                <MudIconButton 
+                    OnClick="() => EditCharacter(context.Id)"
+                    Icon="@Icons.Material.Filled.Edit"
+                    Color="Color.Primary"
+                    Variant="Variant.Filled"
+                ></MudIconButton>
+                <MudIconButton OnClick="() => DeleteCharacter(context.Id)"
+                               Icon="@Icons.Material.Filled.Delete"
+                    Color="Color.Error"
+                    Variant="Variant.Filled">
+                </MudIconButton>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
 
-<button class="btn btn-primary" @onclick="CreateCharacter"> Create a New Character </button>
-
+    <MudIconButton OnClick="CreateCharacter"
+                   Color="Color.Primary"
+                   Variant="Variant.Filled">Create New Character</MudIconButton>
 <p style="height:500px;"></p>
 
 @code {
@@ -73,7 +73,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        characters = await clientCharacterService.GetAllCharacters();
+        await clientCharacterService.GetAllCharacters();
     }
   
     void CreateCharacter() => NavigationManager.NavigateTo($"/character");

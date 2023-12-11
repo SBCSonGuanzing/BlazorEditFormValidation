@@ -21,17 +21,24 @@ else
 
 <EditForm Model="difficulty" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
-
-    <div>
-        <label for="name">Name</label>
-        <InputText id="name" @bind-Value="difficulty.Title" class="form-control" />
-        <ValidationMessage For="() => difficulty.Title" />
-
-    </div>
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Name" @bind-Value="@difficulty.Title"
+                          For="@(() => difficulty.Title)"></MudTextField>
+        </MudCardContent>
+    </MudCard>
     <br />
-    <div>
-        <button type="submit" class="btn btn-primary">@btnText</button>
-    </div>
+
+    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">@(isNew ? "Create Team" : "Update Team")</MudButton>
+    @if(!isNew)
+    {
+    <MudButton ButtonType="ButtonType.Button"
+               OnClick="() => DeleteDifficulty(difficulty.Id)"
+               Color="Color.Error"
+               Variant="Variant.Filled">
+        Delete Difficulty
+    </MudButton>
+    }
 </EditForm>
 
 @code {
@@ -39,6 +46,9 @@ else
     public int? id { get; set; }
 
     string btnText = string.Empty;
+
+    bool isNew = true;
+
 
     public Difficulty difficulty = new Difficulty();
 
@@ -55,6 +65,7 @@ else
             if (result != null)
             {
                 difficulty = result;
+                isNew = true;
             }
             else
             {
@@ -73,6 +84,12 @@ else
         {
             await clientDifficultyService.UpdateDifficulty((int)id, difficulty);
         }
+    }
+
+    async void DeleteDifficulty(int id)
+    {
+        await clientDifficultyService.DeleteDifficulty(id);
+        StateHasChanged();
     }
 
 }

@@ -16,14 +16,12 @@ namespace BlazorPlayGround.Shared.DTOs
         [Required(ErrorMessage = "Please, give this a bio: ")]
         public string Bio { get; set; } = string.Empty;
         [Required(ErrorMessage = "Please, give this Birth Date: ")]
-        public DateTime BirthDate { get; set; } = DateTime.Now;
+        public DateTime? BirthDate { get; set; } = DateTime.Now;
         [Required(ErrorMessage = "Please, give this character an image: ")]
 
         public string Image { get; set; } = string.Empty;
-        [Required(ErrorMessage = "Please, give this character a Team ID: ")]
 
         public int TeamId { get; set; }
-        [Required(ErrorMessage = "Please, give this character a Difficulty ID: ")]
         public int DifficultyId { get; set; }
     }
 }

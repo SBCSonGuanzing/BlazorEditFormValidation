@@ -32,7 +32,7 @@ namespace BlazorPlayGround.Server.Services.CharacterServices
 
         public async Task<List<Character>> DeleteCharacter(int id)
         {
-            var character = await _context.Difficulties
+            var character = await _context.Characters
                     .Where(p => p.Id == id)
                     .FirstOrDefaultAsync();
             if (character is null)
@@ -40,7 +40,7 @@ namespace BlazorPlayGround.Server.Services.CharacterServices
 
             _context.Remove(character);
             await _context.SaveChangesAsync();
-            return await GetAllCharacters();
+            return await _context.Characters.ToListAsync();
         }
 
         public async Task<List<Character>> GetAllCharacters()
@@ -70,19 +70,19 @@ namespace BlazorPlayGround.Server.Services.CharacterServices
         public async Task<List<Character>> UpdateCharacter(int id, Character request)
         {
             var character = await _context.Characters
-                .Where(team => team.Id == id)
+                .Where(character => character.Id == id)
                 .FirstOrDefaultAsync();
 
             if (character == null)
                 return null;
 
             character.Name = request.Name;
-            character.Bio = character.Bio;
-            character.BirthDate = character.BirthDate;
-            character.Image = character.Image;
-            character.TeamId = character.TeamId;
-            character.DifficultyId = character.DifficultyId;
-            character.isReadyToFight = character.isReadyToFight;
+            character.Bio = request.Bio;
+            character.BirthDate = request.BirthDate;
+            character.Image = request.Image;
+            character.TeamId = request.TeamId;
+            character.DifficultyId = request.DifficultyId;
+            character.isReadyToFight = request.isReadyToFight;
 
             await _context.SaveChangesAsync();
 
