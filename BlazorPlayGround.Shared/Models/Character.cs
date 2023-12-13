@@ -11,8 +11,9 @@ namespace BlazorPlayGround.Shared.Models
 
         public string Bio { get; set; } = string.Empty;
 
-        public DateTime? BirthDate { get; set; } = DateTime.Now;
 
+        public DateTime? BirthDate { get; set; } = DateTime.Now;
+        [Required(ErrorMessage = "Please, give this an Avatar ")]
         public string Image { get; set; } = string.Empty;
 
         public Team Team { get; set; }

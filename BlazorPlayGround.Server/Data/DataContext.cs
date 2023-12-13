@@ -12,6 +12,8 @@ namespace BlazorWebAPI.Server.Data
         public DbSet<Team> Teams { get; set; }
 
         public DbSet<Difficulty> Difficulties { get; set; }
+        public DbSet<UserLogin> Users { get; set; }
+        public DbSet<UserDetails> UsersDetails { get; set; }
 
     }
 }

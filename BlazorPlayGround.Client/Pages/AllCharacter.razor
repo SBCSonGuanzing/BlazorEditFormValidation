@@ -6,10 +6,11 @@
 @inject IClientCharacterService clientCharacterService
 @inject IClientTeamService clientTeamService
 @inject IClientDifficultyService clientDifficultyService
-
+@inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 
-<h3>Characters</h3>
+<PageTitle>Characters</PageTitle>
+<h1>Characters</h1>
 
 <MudTable Items="clientCharacterService.characters" Hover="true" Striped="true" Dense="true" Class="mb-2">
     <HeaderContent>
@@ -20,52 +21,65 @@
         <MudTh>Team</MudTh>
         <MudTh>Difficulty</MudTh>
         <MudTh>IsReadyToFight</MudTh>
-        <MudTh>Action</MudTh>
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <MudTh>Action</MudTh>
+            </Authorized>
+        </AuthorizeView>
     </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Image"><MudAvatar Image="@context.Image"></MudAvatar></MudTd>
-        <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Bio">@context.Bio</MudTd>
-            <MudTd DataLabel="BirthDate">@context.BirthDate</MudTd>
-            @if (context.Team != null)
+    <RowTemplate Context="character">
+        <MudTd DataLabel="Image"><MudAvatar Image="@character.Image"></MudAvatar></MudTd>
+        <MudTd DataLabel="Name">@character.Name</MudTd>
+            <MudTd DataLabel="Bio">@character.Bio</MudTd>
+            <MudTd DataLabel="BirthDate">@character.BirthDate</MudTd>
+            @if (character.Team != null)
             {
-                <MudTd DataLabel="Team">@context.Team.Name</MudTd>
+            <MudTd DataLabel="Team">@character.Team.Name</MudTd>
             }
             else
             {
                 <MudTd DataLabel="NoResult">No Results Found</MudTd>
             }
-            @if (context.Difficulty != null)
+        @if (character.Difficulty != null)
             {
-                <MudTd DataLabel="Title">@context.Difficulty.Title</MudTd>
+            <MudTd DataLabel="Title">@character.Difficulty.Title</MudTd>
             }
             else
             {
                 <MudTd>No Results Found</MudTd>
             }
-            <MudTd DataLabel="isReadyToFight">@context.isReadyToFight</MudTd>
-            <MudTd>
-                <MudIconButton 
-                    OnClick="() => EditCharacter(context.Id)"
-                    Icon="@Icons.Material.Filled.Edit"
-                    Color="Color.Primary"
-                    Variant="Variant.Filled"
-                ></MudIconButton>
-                <MudIconButton OnClick="() => DeleteCharacter(context.Id)"
-                               Icon="@Icons.Material.Filled.Delete"
-                    Color="Color.Error"
-                    Variant="Variant.Filled">
-                </MudIconButton>
-            </MudTd>
+        <MudTd DataLabel="isReadyToFight">@character.isReadyToFight</MudTd>
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <MudTd>
+                        <MudIconButton OnClick="() => EditCharacter(character.Id)"
+                            Icon="@Icons.Material.Filled.Edit"
+                            Color="Color.Primary"
+                            Variant="Variant.Filled"
+                        ></MudIconButton>
+                        <MudIconButton OnClick="() => DeleteCharacter(character.Id)"
+                                       Icon="@Icons.Material.Filled.Delete"
+                            Color="Color.Error"
+                            Variant="Variant.Filled">
+                        </MudIconButton>
+                    </MudTd>
+                </Authorized>
+            </AuthorizeView>
         </RowTemplate>
     </MudTable>
 
-    <MudIconButton OnClick="CreateCharacter"
-                   Color="Color.Primary"
-                   Variant="Variant.Filled">Create New Character</MudIconButton>
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <MudIconButton OnClick="CreateCharacter"
+                           Color="Color.Primary"
+                           Variant="Variant.Filled">Create New Character
+            </MudIconButton>
+        </Authorized>
+    </AuthorizeView>
+
 <p style="height:500px;"></p>
 
-@code {
+    @code {
 
     List<Character> characters = new List<Character>();
 
@@ -75,13 +89,35 @@
     {
         await clientCharacterService.GetAllCharacters();
     }
-  
+
     void CreateCharacter() => NavigationManager.NavigateTo($"/character");
-    void EditCharacter(int id) => NavigationManager.NavigateTo($"/character/{id}");
+    void EditCharacter(int id)
+    {
+        NavigationManager.NavigateTo($"/character/{id}");
+
+    }
     async void DeleteCharacter(int id)
     {
         await clientCharacterService.DeleteCharacter(id);
         StateHasChanged();
+
+        Snackbar.Add(
+
+            "Deleted Character Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+                config.ShowTransitionDuration = 200;
+
+                config.HideTransitionDuration = 400;
+
+                config.VisibleStateDuration = 2500;
+
+            });
     }
 
     private void HandleSubmit()

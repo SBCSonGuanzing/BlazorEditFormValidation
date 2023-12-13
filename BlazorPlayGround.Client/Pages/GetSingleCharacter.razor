@@ -8,8 +8,7 @@
 @inject IClientTeamService clientTeamService
 @inject IClientDifficultyService clientDifficultyService   
 @inject NavigationManager NavigationManager
-
-<h3>Teams</h3>
+@inject ISnackbar Snackbar
 
 @if (id is null)
 {
@@ -24,7 +23,12 @@ else
 
 
 <EditForm Model="character" OnValidSubmit="HandleSubmit">
-    <DataAnnotationsValidator />
+
+    @if(id is null)
+    {
+        <DataAnnotationsValidator />
+    }
+
     <MudCard>
         <MudCardContent>
             <MudTextField Label="Name" @bind-Value="@character.Name"
@@ -35,20 +39,17 @@ else
                 For="@(() => character.Bio)"
             >
             </MudTextField>
-            <MudSelect Label="Teams" @bind-Value="character.TeamId">
+            <MudRadioGroup Class="my-4" @bind-SelectedOption="character.TeamId">
                 @foreach (var team in clientTeamService.teams)
                 {
-                    <MudSelectItem Value="@team.Id">
-                        @team.Name
-                    </MudSelectItem>
+                    <MudRadio Option="team.Id" Color="Color.Primary" Size="Size.Small">@team.Name</MudRadio>
                 }
-            </MudSelect>
-             <MudSelect Label="Difficulty" @bind-Value="character.DifficultyId">
-                @foreach (var difficulties in clientDifficultyService.difficulties)
+            </MudRadioGroup>
+            <MudSelect Label="Difficulty" @bind-Value="character.DifficultyId">
+                <MudSelectItem Value="0">Select Difficulty</MudSelectItem>
+                @foreach (var difficulty in clientDifficultyService.difficulties)
                 {
-                    <MudSelectItem Value="@difficulties.Id">
-                        @difficulties.Title
-                    </MudSelectItem>
+                    <MudSelectItem Value="difficulty.Id">@difficulty.Title</MudSelectItem>
                 }
             </MudSelect>
            
@@ -64,6 +65,8 @@ else
             >
                 Upload Image
             </MudButton>
+            <ValidationMessage For="@(() => character.Image)" />
+
             <br/>
             <MudSwitch @bind-Checked="@character.isReadyToFight" Color="Color.Primary" Label="Ready to Fight?"/>
 
@@ -72,7 +75,7 @@ else
     <br />
 
 
-    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">@(isNew ? "Create Character" : "Update Character")</MudButton>
+    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled" Class="mr-2">@(isNew ? "Create Character" : "Update Character")</MudButton>
 
     @if(!isNew) {
     <MudButton ButtonType="ButtonType.Button"
@@ -86,8 +89,6 @@ else
 <p style="height:500px;"></p>
 
 @code {
-
-  
 
     [Parameter]
     public int? id { get; set; }
@@ -136,11 +137,76 @@ else
     {
         if (id is null)
         {
+            if (character.TeamId == 0)
+            {
+                Snackbar.Add(
+                "Team is required!",
+                Severity.Warning,
+                config =>
+            {
+                config.ShowTransitionDuration = 200;
+                config.HideTransitionDuration = 400;
+                config.VisibleStateDuration = 2500;
+            });
+                return;
+            }
+            else if (character.DifficultyId == 0)
+            {
+                Snackbar.Add(
+                "Difficulty is required!",
+                Severity.Warning,
+                config =>
+            {
+                config.ShowTransitionDuration = 200;
+                config.HideTransitionDuration = 400;
+                config.VisibleStateDuration = 2500;
+            });
+                return;
+            }
+
+            
+
             await clientCharacterService.AddCharacter(character);
+            
+            Snackbar.Add(
+
+            "Added Characeter Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+            config.ShowTransitionDuration = 200;
+
+            config.HideTransitionDuration = 400;
+
+            config.VisibleStateDuration = 2500;
+
+            });
         }
+
         else
         {
             await clientCharacterService.UpdateCharacter(character);
+            Snackbar.Add(
+
+            "Updated Characeter Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+                config.ShowTransitionDuration = 200;
+
+                config.HideTransitionDuration = 400;
+
+                config.VisibleStateDuration = 2500;
+
+            });
         }
     }
 
@@ -148,6 +214,23 @@ else
     {
         await clientCharacterService.DeleteCharacter(id);
         StateHasChanged();
+        Snackbar.Add(
+
+            "Deleted Characeter Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+                config.ShowTransitionDuration = 200;
+
+                config.HideTransitionDuration = 400;
+
+                config.VisibleStateDuration = 2500;
+
+            });
     }
 
 }

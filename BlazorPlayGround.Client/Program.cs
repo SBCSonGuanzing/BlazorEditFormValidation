@@ -8,6 +8,8 @@ using BlazorPlayGround.Client.Services.TeamService;
 using BlazorPlayGround.Client.Services.CharacterServices;
 using MudBlazor.Services;
 using Blazored.LocalStorage;
+using BlazorPlayGround.Client.Services.AuthServices;
+using MudBlazor;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -17,6 +19,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<IClientTeamService, ClientTeamService>();
 builder.Services.AddScoped<IClientDifficultyService, ClientDifficultyService>();
 builder.Services.AddScoped<IClientCharacterService, ClientCharacterService>();
+builder.Services.AddScoped<IClientAuthService, ClientAuthService>();
 builder.Services.AddMudServices();
 
 // Register the Authentication State Provider 

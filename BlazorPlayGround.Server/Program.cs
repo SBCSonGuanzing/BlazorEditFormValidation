@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Filters; 
 using System.Text;
 using Microsoft.OpenApi.Models;
+using BlazorPlayGround.Server.Services.AuthServices;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +39,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             { 
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                    .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+                    .GetBytes(builder.Configuration.GetSection("Token").Value!)),
                 ValidateIssuer = false,
                 ValidateAudience = false
             };
@@ -47,6 +49,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IDifficultyService, DifficultyService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<DataContext>();
 
 var app = builder.Build();

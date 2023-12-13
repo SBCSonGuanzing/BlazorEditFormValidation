@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject AuthenticationStateProvider AuthStateProvider
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">BlazorPlayGround.Client</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -7,23 +9,42 @@
     </div>
 </div>
 
+
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <div class="d-flex flex-column text-center">
+    <AuthorizeView>
+            <Authorized>
+                <div class="d-flex justify-content-center mt-5">
+                <MudAvatar Image="images/profile.png" Style="width: 120px; height:120px;"></MudAvatar>
+                </div>
+                <span style="color:white; font-size:17px; margin-top: 6px; font-weight: 500; ">  @context.User.Identity.Name </span>
+            </Authorized>
+        </AuthorizeView>
+        </div>
     <nav class="flex-column">
+        
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
+
+         
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="counter">
+                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="weather">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+                    </NavLink>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="characters">
                 <span class="bi bi-list-person-nav-menu" aria-hidden="true"></span> Characters
@@ -38,7 +59,13 @@
             <NavLink class="nav-link" href="difficulties">
                 <span class="bi bi-list-bar-chart-nav-menu" aria-hidden="true"></span> Difficulties
             </NavLink>
+        </div
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="users">
+                <span class="bi bi-list-people-chart-nav-menu" aria-hidden="true"></span> Users
+            </NavLink>
         </div>
+
     </nav>
 </div>
 

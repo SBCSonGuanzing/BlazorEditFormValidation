@@ -24,6 +24,7 @@ namespace BlazorPlayGround.Client.Services.CharacterServices
         {
             await _httpClient.PostAsJsonAsync("api/Character", character);
             _navigationManager.NavigateTo("/characters");
+
         }
 
         public async Task<List<Character>> DeleteCharacter(int id)

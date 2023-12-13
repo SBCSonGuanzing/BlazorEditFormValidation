@@ -4,42 +4,51 @@
 @inject HttpClient Http
 @inject IClientTeamService clientTeamService
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
 
 <PageTitle>Teams</PageTitle>
+<h1>Teams</h1>
 
-<h3>Teams</h3>
 <MudTable Items="clientTeamService.teams" Hover="true" Striped="true" Dense="true" Class="mb-2">
     <HeaderContent>
         <MudTh>Teams</MudTh>
-        <MudTh>Action</MudTh>
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <MudTh>Action</MudTh>
+            </Authorized>
+        </AuthorizeView>
     </HeaderContent>
-    <RowTemplate>
+    <RowTemplate Context ="title">
 
         <MudTd DataLabel="Title">
-            @context.Name
+            @title.Name
         </MudTd>
-
-        <MudTd>
-            <MudIconButton OnClick="() => editTeam(context.Id)"
-                           Icon="@Icons.Material.Filled.Edit"
-                           Color="Color.Primary"
-                           Variant="Variant.Filled"></MudIconButton>
-            <MudIconButton OnClick="() => deleteTeam(context.Id)"
-                           Icon="@Icons.Material.Filled.Delete"
-                           Color="Color.Error"
-                           Variant="Variant.Filled">
-            </MudIconButton>
-        </MudTd>
-
+        <AuthorizeView Roles="Admin"> 
+            <Authorized>
+                <MudTd>
+                    <MudIconButton OnClick="() => editTeam(title.Id)"
+                                   Icon="@Icons.Material.Filled.Edit"
+                                   Color="Color.Primary"
+                                   Variant="Variant.Filled"></MudIconButton>
+                    <MudIconButton OnClick="() => deleteTeam(title.Id)"
+                                   Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Variant="Variant.Filled">
+                    </MudIconButton>
+                </MudTd>
+            </Authorized>
+        </AuthorizeView>
     </RowTemplate>
 </MudTable>
-
-
-<MudIconButton OnClick="CreateNewTeam"
-               Color="Color.Primary"
-               Variant="Variant.Filled">Create New Team
-</MudIconButton>
-
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <MudIconButton OnClick="CreateNewTeam"
+                       Color="Color.Primary"
+                       Variant="Variant.Filled">Create New Team
+        </MudIconButton>
+    </Authorized>
+</AuthorizeView>
 
 @code {
 
@@ -57,12 +66,27 @@
     {
         await clientTeamService.DeleteTeam(id);
         StateHasChanged();
+        Snackbar.Add(
+
+            "Deleted Team Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+                config.ShowTransitionDuration = 200;
+
+                config.HideTransitionDuration = 400;
+
+                config.VisibleStateDuration = 2500;
+
+            });
     }
 
     void CreateNewTeam() => NavigationManager.NavigateTo($"/team");
 
     void editTeam(int id) => NavigationManager.NavigateTo($"/team/{id}");
-
-
 
 }

@@ -1,0 +1,66 @@
+﻿@using BlazorPlayGround.Client.Services.AuthServices
+@using BlazorPlayGround.Shared.DTOs
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IClientAuthService ClientAuthService
+@inject ISnackbar Snackbar
+@layout AuthLayout
+@page "/register"
+
+<MudText Typo="Typo.h4">Register</MudText>
+    
+<MudPaper Height="400px" Width="100%">
+        <EditForm Model="user" OnValidSubmit="HandleRegistration">
+            <DataAnnotationsValidator/>
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Username" @bind-Value="@user.UserName"
+                                  For="@(() => user.UserName)">
+                    </MudTextField>
+                    <MudTextField Label="Password" @bind-Value="@user.Password"
+                                  For="@(() => user.Password)">
+                    </MudTextField>
+                    <MudTextField Label="FirstName" @bind-Value="@user.FirstName"
+                                  For="@(() => user.FirstName)">
+                    </MudTextField>
+                    <MudTextField Label="LastName" @bind-Value="@user.LastName"
+                                  For="@(() => user.LastName)">
+                    </MudTextField>
+                    <MudTextField Label="Contact" @bind-Value="@user.Contact"
+                                  For="@(() => user.Contact)">
+                    </MudTextField>
+                    <MudTextField Label="Address" @bind-Value="@user.Address"
+                                  For="@(() => user.Address)">
+                    </MudTextField>
+
+                    <MudSelect Label="Role" @bind-Value="user.Role">
+                        <MudSelectItem Value="@("Admin")" />
+                        <MudSelectItem Value="@("User")" />
+                    </MudSelect>
+                </MudCardContent>
+            </MudCard>
+            <br />
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">Register</MudButton>
+        </EditForm>
+</MudPaper>
+@code {
+    UserLoginDto user = new UserLoginDto();
+
+    string[] roles = { "Admin", "User" };
+
+    private async void HandleRegistration()
+    {
+        await ClientAuthService.Register(user);
+        NavigationManager.NavigateTo("/login"); 
+
+        Snackbar.Add(
+            "Registration Successful",
+            Severity.Success,
+        config =>
+        {
+            config.ShowTransitionDuration = 200;
+            config.HideTransitionDuration = 400;
+            config.VisibleStateDuration = 2500;
+        });
+    }
+}

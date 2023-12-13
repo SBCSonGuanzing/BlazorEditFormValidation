@@ -4,40 +4,51 @@
 @inject HttpClient Http
 @inject IClientDifficultyService clientDifficultyService
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 
 <PageTitle>Difficulties</PageTitle>
+<h1>Difficulties</h1>
 
-<h3>Difficulties</h3>
 <MudTable Items="clientDifficultyService.difficulties" Hover="true" Striped="true" Dense="true" Class="mb-2">
     <HeaderContent>
         <MudTh>Difficulties</MudTh>
-        <MudTh>Action</MudTh>
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <MudTh>Action</MudTh>
+            </Authorized>
+        </AuthorizeView>
     </HeaderContent>
-    <RowTemplate>
-
+    <RowTemplate Context="difficulties">
         <MudTd DataLabel="Title">
-            @context.Title
+            @difficulties.Title
         </MudTd>
-
-        <MudTd>
-            <MudIconButton OnClick="() => editDifficulty(context.Id)"
-                           Icon="@Icons.Material.Filled.Edit"
-                           Color="Color.Primary"
-                           Variant="Variant.Filled"></MudIconButton>
-            <MudIconButton OnClick="() => deleteDifficulty(context.Id)"
-                           Icon="@Icons.Material.Filled.Delete"
-                           Color="Color.Error"
-                           Variant="Variant.Filled">
-            </MudIconButton>
-        </MudTd>
-
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <MudTd>
+                    <MudIconButton OnClick="() => editDifficulty(difficulties.Id)"
+                                   Icon="@Icons.Material.Filled.Edit"
+                                   Color="Color.Primary"
+                                   Variant="Variant.Filled"></MudIconButton>
+                    <MudIconButton OnClick="() => deleteDifficulty(difficulties.Id)"
+                                   Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Variant="Variant.Filled">
+                    </MudIconButton>
+                </MudTd>
+            </Authorized>
+        </AuthorizeView>
     </RowTemplate>
 </MudTable>
 
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <MudIconButton OnClick="createDifficulty"
+                   Color="Color.Primary"
+                   Variant="Variant.Filled">Create New Difficulty
+        </MudIconButton>
+    </Authorized>
+</AuthorizeView>
 
-<MudIconButton OnClick="createDifficulty"
-               Color="Color.Primary"
-               Variant="Variant.Filled">Create New Difficulty</MudIconButton>
 <p style="height:500px;"></p>
 
 @code {
@@ -56,6 +67,23 @@
     {
         await clientDifficultyService.DeleteDifficulty(id);
         StateHasChanged();
+        Snackbar.Add(
+
+            "Deleted Difficulty Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+                config.ShowTransitionDuration = 200;
+
+                config.HideTransitionDuration = 400;
+
+                config.VisibleStateDuration = 2500;
+
+            });
     }
 
     void createDifficulty() => NavigationManager.NavigateTo($"/difficulty");

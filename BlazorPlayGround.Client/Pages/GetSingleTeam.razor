@@ -5,8 +5,7 @@
 @inject HttpClient Http
 @inject IClientTeamService clientTeamService
 @inject NavigationManager NavigationManager
-
-<h3>Teams</h3>
+@inject ISnackbar Snackbar
 
 @if (id is null)
 {
@@ -20,7 +19,10 @@ else
 }
 
 <EditForm Model="team" OnValidSubmit="HandleSubmit">
-    <DataAnnotationsValidator />
+    @if(id is null)
+    {
+        <DataAnnotationsValidator />
+    }
     <MudCard>
         <MudCardContent>
             <MudTextField Label="Team" @bind-Value="@team.Name"
@@ -31,7 +33,7 @@ else
 
     <br />
 
-    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">@(isNew ? "Create Team" : "Update Team")</MudButton>
+    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled" Class="mr-2">@(isNew ? "Create Team" : "Update Team")</MudButton>
     @if(!isNew)
     {
         
@@ -39,7 +41,7 @@ else
                OnClick="() => DeleteTeam(team.Id)"
                Color="Color.Error"
                Variant="Variant.Filled">
-        Delete Difficulty
+        Delete Team
     </MudButton>
     }
 
@@ -69,6 +71,7 @@ else
             if (result != null)
             {
                 team = result;
+                isNew = false;
             }
             else
             {
@@ -82,10 +85,44 @@ else
         if (id is null)
         {
             await clientTeamService.AddTeam(team);
+            Snackbar.Add(
+
+            "Added Team Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+                config.ShowTransitionDuration = 200;
+
+                config.HideTransitionDuration = 400;
+
+                config.VisibleStateDuration = 2500;
+
+            });
         }
         else
         {
             await clientTeamService.UpdateTeam((int)id, team);
+            Snackbar.Add(
+
+            "Updated Team Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+                config.ShowTransitionDuration = 200;
+
+                config.HideTransitionDuration = 400;
+
+                config.VisibleStateDuration = 2500;
+
+            });
         }
     }
 
@@ -93,5 +130,22 @@ else
     {
         await clientTeamService.DeleteTeam(id);
         StateHasChanged();
+        Snackbar.Add(
+
+            "Deleted Team Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+                config.ShowTransitionDuration = 200;
+
+                config.HideTransitionDuration = 400;
+
+                config.VisibleStateDuration = 2500;
+
+            });
     }
 }

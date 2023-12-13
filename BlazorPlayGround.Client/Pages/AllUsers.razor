@@ -1,0 +1,46 @@
+﻿@page "/users"
+
+@using BlazorPlayGround.Client.Services.AuthServices
+@using BlazorPlayGround.Shared.DTOs
+@inject IClientAuthService ClientAuthService
+
+<PageTitle>Users</PageTitle>
+<h1>Users</h1>
+<MudTable Items="ClientAuthService.users" Hover="true" Striped="true" Dense="true" Class="mb-2">
+    <HeaderContent>
+        <MudTh>First Name</MudTh>
+        <MudTh>Last Name</MudTh>
+        <MudTh>Contact</MudTh>
+        <MudTh>Address</MudTh>
+        <MudTh>Role</MudTh>
+    </HeaderContent>
+    <RowTemplate Context="usersDetails">
+
+        <MudTd DataLabel="FirstName">
+            @usersDetails.UserDetails.FirstName
+        </MudTd>
+        <MudTd DataLabel="LastName">
+            @usersDetails.UserDetails.LastName
+        </MudTd>
+        <MudTd DataLabel="Contact">
+            @usersDetails.UserDetails.Contact
+        </MudTd>
+        <MudTd DataLabel="Address">
+            @usersDetails.UserDetails.Address
+        </MudTd>
+        <MudTd DataLabel="Role">
+            @usersDetails.Role
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+
+    List<UserLogin> usersDetails = new List<UserLogin>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        usersDetails = await ClientAuthService.GetAllUser(); 
+    }
+
+}

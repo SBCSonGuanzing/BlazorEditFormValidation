@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "BlazorPlayGround.Client",
   "resources": {
-    "hash": "sha256-fhZ7ffiG5JPxPGXezUjLP43GpypHEEXlLOpj2hdYsW4=",
+    "hash": "sha256-h/q8dwYLLKBo+Np12wSY2s4u1FNqN1O/xFdcu2KB7lk=",
     "jsModuleNative": {
       "dotnet.native.8.0.0.rywfmwxuqa.js": "sha256-LjLDIz9+J7uuiwMlQ4HbNx2BnSpphOtO2MwkoI28vdI="
     },
@@ -18,6 +18,10 @@
     },
     "assembly": {
       "Blazored.LocalStorage.wasm": "sha256-xHBGFCMjDjvvTwtMvgaMBNmQk9JdVhGmws2/GMZlxrI=",
+      "Blazorise.wasm": "sha256-J6AcopcR9421THA0nMQH9gvTwbftk35Pr3RShyOhZKg=",
+      "Blazorise.Licensing.wasm": "sha256-vmNGzxXoM2MA6rFUp99OvXbE3FJlYnUDr6zyA1Nc3Xc=",
+      "Blazorise.Snackbar.wasm": "sha256-S9eeUBbWGaau7MCF5+bsnsSUvkpgrao8Y/xPC5/I7DM=",
+      "DeepCloner.wasm": "sha256-JFrc0XdxhCpcC/rNoZ4sGLtZTNiex5j561fsLJEixRY=",
       "Microsoft.AspNetCore.Authorization.wasm": "sha256-j29bzsbGr0GXbz3saSOBqDtWxNOK08Or3b1HgnZ+pvA=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-0SRqG4hZOVUUFxERmD93PJWBJR6d4gCf5UB9vF6jB9A=",
       "Microsoft.AspNetCore.Components.Authorization.wasm": "sha256-EFv+L1YnGvKwdvpSUAgxwhBJoxTLebypp66mmnzNKr4=",
@@ -213,12 +217,12 @@
       "mscorlib.wasm": "sha256-cDuLeL3OCtVtiid/dyex1MVgbuzDSRwZxKzuP2Dp4mg=",
       "netstandard.wasm": "sha256-A0h86SDieTMoU/wU2JTszWCsUmMuguDcbap0b0BzsmI=",
       "System.Private.CoreLib.wasm": "sha256-/0DNIm/T0C07X7Tuz5uR8JvVCoAfEE2MnfPUSjyS9xc=",
-      "BlazorPlayGround.Shared.wasm": "sha256-99u3Hb11tgNkH0pG95k5DQDUy5wY8LgOTeD2b6HanLU=",
-      "BlazorPlayGround.Client.wasm": "sha256-cU2sGfZl/on6eeL5UJiemLIoMD8BaK2Xk2HcqIBwbZM="
+      "BlazorPlayGround.Shared.wasm": "sha256-lFSzPNXfzhM5oBa0hlUSNxJWBRDzVQqlsKMHjrrap3Y=",
+      "BlazorPlayGround.Client.wasm": "sha256-ZmeZ2GJ1A2bKqx2yMaFJMRJYYUiYmvytkGTWpN/YtZU="
     },
     "pdb": {
-      "BlazorPlayGround.Shared.pdb": "sha256-06wrYhYr6qwZETKzDtzwphC6392DddgGheSnhuLw8Po=",
-      "BlazorPlayGround.Client.pdb": "sha256-zc2x5uqm3XZtT5hpG7iwXg8tZAW7hkxIdncOHgxyUBg="
+      "BlazorPlayGround.Shared.pdb": "sha256-7D5ezQ8b5gkuJfurjGtu3lvg0i7krEXUbBZA2ib0Kgs=",
+      "BlazorPlayGround.Client.pdb": "sha256-NGRl9boHqtMymyS+aos3sKFzkuI9kOGlzSOXwz3Fsvw="
     }
   },
   "cacheBootResources": true,

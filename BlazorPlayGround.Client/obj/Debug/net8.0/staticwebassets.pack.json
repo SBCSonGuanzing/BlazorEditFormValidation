@@ -33,6 +33,10 @@
       "PackagePath": "staticwebassets\\icon-192.png"
     },
     {
+      "Id": "C:\\Project\\BlazorPlayGround\\BlazorPlayGround.Client\\wwwroot\\images\\profile.png",
+      "PackagePath": "staticwebassets\\images\\profile.png"
+    },
+    {
       "Id": "C:\\Project\\BlazorPlayGround\\BlazorPlayGround.Client\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },

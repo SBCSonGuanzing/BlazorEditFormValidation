@@ -34,7 +34,7 @@ namespace BlazorPlayGround.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("BirthDate")
+                    b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DifficultyId")
@@ -55,6 +55,10 @@ namespace BlazorPlayGround.Server.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DifficultyId");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("Characters");
                 });
@@ -91,6 +95,106 @@ namespace BlazorPlayGround.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("BlazorPlayGround.Shared.Models.UserDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Contact")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserLoginId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserLoginId")
+                        .IsUnique();
+
+                    b.ToTable("UsersDetails");
+                });
+
+            modelBuilder.Entity("BlazorPlayGround.Shared.Models.UserLogin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BlazorPlayGround.Shared.Models.Character", b =>
+                {
+                    b.HasOne("BlazorPlayGround.Shared.Models.Difficulty", "Difficulty")
+                        .WithMany()
+                        .HasForeignKey("DifficultyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlazorPlayGround.Shared.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Difficulty");
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("BlazorPlayGround.Shared.Models.UserDetails", b =>
+                {
+                    b.HasOne("BlazorPlayGround.Shared.Models.UserLogin", "UserLogin")
+                        .WithOne("UserDetails")
+                        .HasForeignKey("BlazorPlayGround.Shared.Models.UserDetails", "UserLoginId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserLogin");
+                });
+
+            modelBuilder.Entity("BlazorPlayGround.Shared.Models.UserLogin", b =>
+                {
+                    b.Navigation("UserDetails")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

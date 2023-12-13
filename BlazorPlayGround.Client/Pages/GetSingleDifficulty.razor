@@ -5,13 +5,12 @@
 @inject HttpClient Http
 @inject IClientDifficultyService clientDifficultyService
 @inject NavigationManager NavigationManager
-
-<h3>Teams</h3>
+@inject ISnackbar Snackbar
 
 @if (id is null)
 {
     <PageTitle>New Team</PageTitle>
-    <h2>Create a New Team</h2>
+    <h2>Create a New Difficulty</h2>
 }
 else
 {
@@ -20,7 +19,12 @@ else
 }
 
 <EditForm Model="difficulty" OnValidSubmit="HandleSubmit">
-    <DataAnnotationsValidator />
+
+    @if(id is null)
+    {   
+        <DataAnnotationsValidator />
+    }
+
     <MudCard>
         <MudCardContent>
             <MudTextField Label="Name" @bind-Value="@difficulty.Title"
@@ -29,7 +33,7 @@ else
     </MudCard>
     <br />
 
-    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">@(isNew ? "Create Team" : "Update Team")</MudButton>
+    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled" Class="mr-2">@(isNew ? "Create Difficulty" : "Update Difficulty")</MudButton>
     @if(!isNew)
     {
     <MudButton ButtonType="ButtonType.Button"
@@ -65,7 +69,7 @@ else
             if (result != null)
             {
                 difficulty = result;
-                isNew = true;
+                isNew = false;
             }
             else
             {
@@ -79,10 +83,36 @@ else
         if (id is null)
         {
             await clientDifficultyService.AddDifficulty(difficulty);
+            Snackbar.Add(
+
+            "Added Difficulty Successfully",
+
+            Severity.Success,
+
+            config =>
+
+            {
+
+                config.ShowTransitionDuration = 200;
+
+                config.HideTransitionDuration = 400;
+
+                config.VisibleStateDuration = 2500;
+
+            });
         }
         else
         {
             await clientDifficultyService.UpdateDifficulty((int)id, difficulty);
+            Snackbar.Add(
+                "Update Difficulty Successfully",
+                Severity.Success,
+            config =>
+            {
+                config.ShowTransitionDuration = 200;
+                config.HideTransitionDuration = 400;
+                config.VisibleStateDuration = 2500;
+            });
         }
     }
 
@@ -90,6 +120,15 @@ else
     {
         await clientDifficultyService.DeleteDifficulty(id);
         StateHasChanged();
+        Snackbar.Add(
+                "Deleted Difficulty Successfully",
+                Severity.Success,
+            config =>
+            {
+                config.ShowTransitionDuration = 200;
+                config.HideTransitionDuration = 400;
+                config.VisibleStateDuration = 2500;
+            });
     }
 
 }
